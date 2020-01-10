@@ -3,7 +3,7 @@
 # Mashup from various authors:
 # brainflakes, pageauc, peewee2, Kesthal
 
-import StringIO
+from io import BytesIO
 import subprocess
 import os
 import time
@@ -82,7 +82,7 @@ def sendEmail(emailTo, filename, additionalSubject):
 # Capture a small test image (for motion detection)
 def captureTestImage():
     command = "raspistill -w %s -h %s -t 0 -e bmp -o -" % (100, 75)
-    imageData = StringIO.StringIO()
+    imageData = BytesIO()
     imageData.write(subprocess.check_output(command, shell=True))
     imageData.seek(0)
     im = Image.open(imageData)
@@ -107,7 +107,7 @@ def keepDiskSpaceFree(bytesToReserve):
         for filename in sorted(os.listdir(".")):
             if filename.startswith(fileNamePrefix) and filename.endswith(".jpg"):
                 os.remove(filename)
-                print "Deleted %s to avoid filling disk" % filename
+                print ("Deleted %s to avoid filling disk" % filename)
                 if (getFreeSpace() > bytesToReserve):
                     return
 
@@ -127,12 +127,12 @@ lastCapture = time.time()
 # added this to give visual feedback of camera motion capture activity.
 # Can be removed as required
 os.system('clear')
-print "            Motion Detection Started"
-print "            ------------------------"
-print "Pixel Threshold (How much)   = " + str(threshold)
-print "Sensitivity (changed Pixels) = " + str(sensitivity)
-print "File Path for Image Save     = " + filepath
-print "---------- Motion Capture File Activity --------------"
+print ("            Motion Detection Started")
+print ("            ------------------------")
+print ("Pixel Threshold (How much)   = " + str(threshold))
+print ("Sensitivity (changed Pixels) = " + str(sensitivity))
+print ("File Path for Image Save     = " + filepath)
+print ("---------- Motion Capture File Activity --------------")
 
 while (True):
 
@@ -141,9 +141,9 @@ while (True):
 
     # Count changed pixels
     changedPixels = 0
-    for x in xrange(0, 100):
+    for x in range(0, 100):
         # Scan one line of image then check sensitivity for movement
-        for y in xrange(0, 75):
+        for y in range(0, 75):
             # Check green as it's the highest quality channel
             pixdiff = abs(buffer1[x, y][1] - buffer2[x, y][1])
             if pixdiff > threshold:
